@@ -1,0 +1,19 @@
+#!/bin/sh
+
+
+if [ "$1" != "" ]; then
+	openssl.exe req \
+	    -x509 -nodes -days 730 -newkey rsa:2048 \
+	    -keyout wildcard."$1".pem -out wildcard."$1".pem \
+	    -config wildcard."$1".cnf \
+	    -subj "/CN=*.$1/"
+
+
+	openssl.exe pkcs12 \
+	    -export -out wildcard."$1".pfx -in wildcard."$1".pem \
+    	-name "*.$1" \
+	    -passout pass:"$1"
+else
+    echo "Please specify a host"
+fi
+
